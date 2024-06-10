@@ -1,5 +1,5 @@
 const getAllTasks = async () => {
-   const backend_host = "http://localhost:5000";
+   const backend_host = "https://project-manager-backend-ten.vercel.app";
 
    try {
       const res = await fetch(`${backend_host}/task/get-all-tasks`, {
