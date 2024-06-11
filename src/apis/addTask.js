@@ -1,5 +1,5 @@
 const addTask = async ({ title, description }) => {
-   const backend_host = "https://project-manager-backend-ten.vercel.app";
+   const backend_host = import.meta.env.VITE_API;
 
    try {
       const res = await fetch(`${backend_host}/task/add`, {

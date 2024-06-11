@@ -1,12 +1,16 @@
-const getAllTasks = async () => {
+const updateTask = async ({ task_id, status }) => {
    const backend_host = import.meta.env.VITE_API;
 
    try {
-      const res = await fetch(`${backend_host}/task/get-all-tasks`, {
-         method: 'GET',
+      const res = await fetch(`${backend_host}/task/status/update`, {
+         method: 'POST',
          headers: {
             'Content-Type': 'application/json'
-         }
+         },
+         body: JSON.stringify({
+            task_id,
+            status
+         }),
       });
 
       const resData = await res.json();
@@ -17,4 +21,4 @@ const getAllTasks = async () => {
    }
 };
 
-export default getAllTasks;
+export default updateTask;

@@ -1,18 +1,11 @@
+//Importing --
 import React from 'react';
-import AddTask from './components/AddTask';
-import AllTask from './components/AllTask';
+import Home from './pages/Home';
+import { TaskContextProvider } from './contexts/TaskContext';
 
 function App() {
-
 	return (
-		<div style={{ padding: '20px' }}>
-			<h1>Project Manager</h1>
-			<br />
-			<AddTask />
-			<hr />
-
-			<AllTask />
-		</div>
+		<Home />
 	);
 }
 
