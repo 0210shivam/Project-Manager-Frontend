@@ -1,20 +1,15 @@
 export default function convertDate(dateStr) {
-   // Parse the date string into a Date object
-   const date = new Date(dateStr);
+   if (!dateStr) return "No Date";
+   let newD = new Date(dateStr);
 
-   // Extract the date components
-   const day = String(date.getUTCDate()).padStart(2, '0');
-   const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
-   const year = date.getUTCFullYear();
+   let options = {
+      weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+      hour: 'numeric', minute: 'numeric', second: 'numeric'
+   };
 
-   // Extract the time components
-   const hours = String(date.getUTCHours()).padStart(2, '0');
-   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-   const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+   let newDate = newD.toLocaleString('en-GB', options);
+   console.log(newDate);
 
-   // Format the date and time
-   const dateFormatted = `${day}-${month}-${year}`;
-   const timeFormatted = `${hours}:${minutes}:${seconds}`;
 
-   return { dateFormatted, timeFormatted };
+   return newDate;
 }

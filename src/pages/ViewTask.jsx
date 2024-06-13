@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTaskContext } from '../contexts/TaskContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import updateTask from '../apis/updateStatus';
@@ -6,17 +6,27 @@ import convertDate from '../utils/functions/convertDate';
 
 const ViewTask = () => {
    const { values, setValues } = useTaskContext();
+   const [extractedTask, setExtractedTask] = useState(null);
    const navigate = useNavigate();
 
    const location = useLocation();
    const queryParams = new URLSearchParams(location.search);
    const taskId = queryParams.get('id');
 
-   const extractedTask = values.tasks.find(task => task._id === taskId);
+   useEffect(() => {
+      if (values?.tasks) {
+         const extractedTask = values.tasks.find(task => task._id === taskId);
+         setExtractedTask(extractedTask);
+      }
+   }, [values.tasks, taskId]);
+
+
+
+   console.log("Extracted Task", extractedTask);
 
    const formattedAddDate = convertDate(extractedTask?.added_on);
-   const formattedDueDate = convertDate(extractedTask?.due_date);
-   const formattedCompleteDate = convertDate(extractedTask?.completed_on);
+   // const formattedDueDate = convertDate(extractedTask?.due_date);
+   const formattedCompleteDate = extractedTask.completed_on && convertDate(extractedTask?.completed_on);
 
    const handleStatusChange = async (e) => {
       e.preventDefault();
@@ -38,24 +48,24 @@ const ViewTask = () => {
          <h2>{extractedTask?.title}</h2>
 
          <div style={{ marginTop: '10px' }}>
-            <span style={{ fontWeight: 'bold' }}>Added On:</span> {formattedAddDate.dateFormatted}, {formattedAddDate.timeFormatted}
+            <span style={{ fontWeight: 'bold' }}>Added On:</span> {formattedAddDate}
          </div>
 
-         <div style={{ marginTop: '10px' }}>
+         {/* <div style={{ marginTop: '10px' }}>
             <span style={{ fontWeight: 'bold' }}>Due Date:</span> {formattedDueDate.dateFormatted !== "NaN-NaN-NaN" ? formattedDueDate.dateFormatted : "No Date"}, {formattedDueDate.timeFormatted !== "NaN:NaN:NaN" ? formattedDueDate.timeFormatted : "No Time"}
-         </div>
+         </div> */}
 
          {
             extractedTask?.status === "completed" ?
                <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Completed On:</span> {formattedCompleteDate.dateFormatted !== "NaN-NaN-NaN" ? formattedCompleteDate.dateFormatted : "No Date"}, {formattedCompleteDate.timeFormatted !== "NaN:NaN:NaN" ? formattedCompleteDate.timeFormatted : "No Time"}
+                  <span style={{ fontWeight: 'bold' }}>Completed On:</span> {formattedCompleteDate?.dateFormatted !== "NaN-NaN-NaN" ? formattedCompleteDate?.dateFormatted : "No Date"}, {formattedCompleteDate?.timeFormatted !== "NaN:NaN:NaN" ? formattedCompleteDate?.timeFormatted : "No Time"}
                </div> :
                <div style={{ marginTop: '10px', marginBottom: '10px' }}>
                   <span style={{ fontWeight: 'bold' }}>Status: </span>
                   {
                      extractedTask?.status === "running" && "Running" ||
                      extractedTask?.status === "completed" && "Completed" ||
-                     extractedTask?.status === "pasued" && "Paused"
+                     extractedTask?.status === "pasued" && "Paused" || "Not Started"
                   }
                </div>
          }
